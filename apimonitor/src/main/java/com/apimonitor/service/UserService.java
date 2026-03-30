@@ -2,6 +2,7 @@ package com.apimonitor.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.apimonitor.entity.User;
 import com.apimonitor.repository.UserRepository;
 
@@ -13,5 +14,16 @@ public class UserService {
 
     public User registerUser(User user) {
         return userRepository.save(user);
+    }
+
+    public User loginUser(String email, String password) {
+
+        User user = userRepository.findByEmail(email);
+
+        if (user != null && user.getPassword().equals(password)) {
+            return user;
+        } else {
+            throw new RuntimeException("Invalid credentials");
+        }
     }
 }
