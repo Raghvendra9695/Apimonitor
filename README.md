@@ -52,7 +52,7 @@ This project is currently in **Active Development**.
 
 ### Frontend Deployment:
 The frontend is live and can be accessed here:  
-🔗 **[INSERT YOUR LIVE NETLIFY/VERCEL LINK HERE]**
+🔗 **[https://api-monitor.netlify.app/]**
 
 ### Installation (Local Development):
 ```bash
