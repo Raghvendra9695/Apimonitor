@@ -30,7 +30,7 @@ public class ApiController {
         return apiService.addApi(api);
     }
 
-    // 2. Get all APIs with Latest Status (Smart Method)
+    // 2. Get all APIs
     @GetMapping
     public List<Map<String, Object>> getAllApis() {
         List<Api> apis = apiService.getAllApis();
@@ -43,11 +43,10 @@ public class ApiController {
             apiData.put("url", api.getUrl());
             apiData.put("method", api.getMethod());
 
-            // ✅ Har API ka sabse naya log dhoondo
             Optional<ApiLog> latestLog = apiLogRepository.findTopByApiIdOrderByTimestampDesc(api.getId());
 
             if (latestLog.isPresent()) {
-                apiData.put("status", latestLog.get().getStatus()); // 200, 500 etc.
+                apiData.put("status", latestLog.get().getStatus());
                 apiData.put("latency", latestLog.get().getResponseTime());
             } else {
                 apiData.put("status", "PENDING");
@@ -58,7 +57,7 @@ public class ApiController {
         return response;
     }
 
-    // 3. Delete API
+
     @DeleteMapping("/{id}")
     public String deleteApi(@PathVariable Long id) {
         apiService.deleteApi(id);

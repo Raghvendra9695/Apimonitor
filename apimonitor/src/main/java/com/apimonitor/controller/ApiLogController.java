@@ -15,13 +15,13 @@ public class ApiLogController {
     @Autowired
     private ApiLogService apiLogService;
 
-    // 🔥 Get all logs
+    //  Get all logs
     @GetMapping
     public List<ApiLog> getAllLogs() {
         return apiLogService.getAllLogs();
     }
 
-    // 🔥 Get logs by API ID
+    //  Get logs by API ID
     @GetMapping("/{apiId}")
     public List<ApiLog> getLogsByApi(@PathVariable Long apiId) {
         return apiLogService.getLogsByApiId(apiId);
