@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+// Entity Api
 @Entity
 @Data
 @NoArgsConstructor
