@@ -16,23 +16,30 @@ public class UserController {
 
     @PostMapping("/register")
     public User register(@RequestBody User user) {
+        System.out.println("Registering user: " + user.getEmail());
         return userService.registerUser(user);
     }
 
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
+        System.out.println("Login attempt for: " + user.getEmail());
         try {
             User dbUser = userService.loginUser(user.getEmail(), user.getPassword());
 
             if (dbUser != null) {
                 String token = JwtUtil.generateToken(dbUser.getEmail());
+                System.out.println("✅ Login Successful for: " + dbUser.getEmail());
                 return ResponseEntity.ok(token);
-            } else {
-                return ResponseEntity.status(401).body("Invalid email or password");
             }
+            return ResponseEntity.status(401).body("Invalid email or password");
+
+        } catch (RuntimeException e) {
+
+            System.out.println("❌ Login Failed: " + e.getMessage());
+            return ResponseEntity.status(401).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(403).body("Login failed: " + e.getMessage());
+            System.out.println("🔥 Server Error: " + e.getMessage());
+            return ResponseEntity.status(500).body("Internal Server Error");
         }
     }
 }
