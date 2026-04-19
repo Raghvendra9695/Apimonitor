@@ -1,4 +1,5 @@
 package com.apimonitor.service;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,7 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    /**
-     * Naya user register karne ke liye
-     */
+    // Register User
     public User registerUser(User user) {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
@@ -26,16 +25,14 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    /**
-     * Login logic with Debugging logs
-     */
-
+    // Login User
     public User loginUser(String email, String password) {
         User user = userRepository.findByEmail(email);
 
-        if (user != null && password.equals(user.getPassword())) {
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
             return user;
         }
+
         throw new RuntimeException("Invalid credentials");
     }
 }
