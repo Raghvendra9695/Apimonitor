@@ -18,18 +18,38 @@ public class UserService {
 
     // Register User
     public User registerUser(User user) {
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
+
+        String rawPassword = user.getPassword().trim();
+        String encodedPassword = passwordEncoder.encode(rawPassword);
+
         user.setPassword(encodedPassword);
 
-        System.out.println("DEBUG: Registering user with email: " + user.getEmail());
+        System.out.println("✅ Registering user: " + user.getEmail());
+
         return userRepository.save(user);
     }
 
     // Login User
     public User loginUser(String email, String password) {
+
         User user = userRepository.findByEmail(email);
 
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+        if (user == null) {
+            System.out.println("❌ User not found: " + email);
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        String inputPassword = password.trim();
+
+        System.out.println("📩 Login attempt: " + email);
+        System.out.println("🔑 Input Password: [" + inputPassword + "]");
+        System.out.println("🔒 DB Hash: " + user.getPassword());
+
+        boolean isMatch = passwordEncoder.matches(inputPassword, user.getPassword());
+
+        System.out.println("✅ Password Match Result: " + isMatch);
+
+        if (isMatch) {
             return user;
         }
 
